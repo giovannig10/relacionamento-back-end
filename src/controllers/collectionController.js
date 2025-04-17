@@ -1,3 +1,4 @@
+import collectionModel from "../models/collectionModel.js";
 import CollectionModel from "../models/collectionModel.js";
 
 class CollectionController {
@@ -30,57 +31,40 @@ class CollectionController {
     }
   }
 
-  // POST /api/personagens
-  async createPersonagem(req, res) {
+  // POST /coleções
+  async createCollection(req, res) {
     try {
       // Validação básica
       const {
-        title,
+        name,
         description,
-        episodes,
-        releaseYear,
-        studio,
-        genres,
-        rating,
-        imageUrl,
+        releaseYear
       } = req.body;
 
       // Verifica se todos os campos do personagem foram fornecidos
       if (
-        !title ||
-        !description ||
-        !episodes ||
-        !releaseYear ||
-        !studio ||
-        !genres ||
-        !rating ||
-        !imageUrl
+        !name || !releaseYear
       ) {
         return res
           .status(400)
-          .json({ error: "Todos os campos são obrigatórios" });
+          .json({ error: "Os campos nome e ano de lançamento são obrigatorios" });
       }
 
-      // Criar o novo personagem
-      const newPersonagem = await PersonagemModel.create(
-        title,
+      // Criar a nova coleção
+      const newCollection = await collectionModel.create(
+        name,
         description,
-        episodes,
-        releaseYear,
-        studio,
-        genres,
-        rating,
-        imageUrl
+        releaseYear
       );
 
-      if (!newPersonagem) {
-        return res.status(400).json({ error: "Erro ao criar personagem" });
+      if (!newCollection) {
+        return res.status(400).json({ error: "Erro ao criar coleção" });
       }
 
-      res.status(201).json(newPersonagem);
+      res.status(201).json(newCollection);
     } catch (error) {
-      console.error("Erro ao criar personagem:", error);
-      res.status(500).json({ error: "Erro ao criar personagem" });
+      console.error("Erro ao criar coleção:", error);
+      res.status(500).json({ error: "Erro ao criar coleção" });
     }
   }
 
